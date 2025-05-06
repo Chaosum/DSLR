@@ -35,13 +35,17 @@ setup:
 
 # Pour lancer un script Python dans le venv
 describe: setup
-	@$(PYTHON) describe.py
+	@$(PYTHON) ./src/describe.py
 
 histogram: setup
-	@$(PYTHON) histogram.py
+	@$(PYTHON) ./src/histogram.py
 
 scatter_plot: setup
-	@$(PYTHON) scatter_plot.py
+	@$(PYTHON) ./src/scatter_plot.py
+
+pair_plot: setup
+	@$(PYTHON) ./src/pair_plot.py
+
 
 
 # Pour ouvrir un shell dans le venv

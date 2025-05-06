@@ -126,8 +126,8 @@ if (len(sys.argv) > 2):
 if (len(sys.argv) == 2 and os.path.isfile(sys.argv[1]) is True):
     file = sys.argv[1]
 else :
-    print("using default file ./datasets/dataset_train.csv")
-    file = "./datasets/dataset_train.csv"
+    print("using default file ./src/datasets/dataset_train.csv")
+    file = "./src/datasets/dataset_train.csv"
 
 data = read_csv(file)
 numeric_cols = detect_numeric_columns(data)
