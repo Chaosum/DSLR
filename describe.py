@@ -120,14 +120,14 @@ def print_stats(describe_result, numeric_col):
             print(f"{stats[stat]:>{len(stat) if len(stat) >= 15 else 15}.6f}", end='\t')  # Formatage à 6 décimales
         print()
 
-if (len(sys.argv) > 3):
-    print("Wrong arg : expected 'python describe.py filename")
+if (len(sys.argv) > 2):
+    print("Wrong arg : expected 'python describe.py [filename]")
     sys.exit()
-if (os.path.isfile(sys.argv[1]) is False):
-    print("file {sys.argv[1]} not found defaulting to ./datasets/dataset_test.csv")
-    file = "./datasets/dataset_test.csv"
-else :
+if (len(sys.argv) == 2 and os.path.isfile(sys.argv[1]) is True):
     file = sys.argv[1]
+else :
+    print("using default file ./datasets/dataset_train.csv")
+    file = "./datasets/dataset_train.csv"
 
 data = read_csv(file)
 numeric_cols = detect_numeric_columns(data)

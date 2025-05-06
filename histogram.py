@@ -10,11 +10,11 @@ from plot_utils import read_csv_split_houses
 if (len(sys.argv) > 3):
     print("Wrong arg : expected 'python describe.py filename")
     sys.exit()
-if (len(sys.argv) == 1 or os.path.isfile(sys.argv[1]) is False):
+if (len(sys.argv) == 2 and os.path.isfile(sys.argv[1]) is True):
+    file = sys.argv[1]
+else :
     print("using default file ./datasets/dataset_train.csv")
     file = "./datasets/dataset_train.csv"
-else :
-    file = sys.argv[1]
 
 
 data = read_csv_split_houses(file)
