@@ -1,4 +1,3 @@
-import csv
 import os
 import sys
 import matplotlib.pyplot as plt
@@ -6,7 +5,7 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from global_variable import houses, housesColor, courses
 from plot_utils import read_csv_split_houses
 import tkinter as tk
-from tkinter import Canvas, ttk
+from tkinter import ttk
 
 if (len(sys.argv) > 3):
     print("Wrong arg : expected 'python describe.py [filename]")

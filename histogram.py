@@ -6,7 +6,6 @@ from tkinter import ttk
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from global_variable import houses, housesColor, courses
 from plot_utils import read_csv_split_houses
-import numpy as np
 
 if (len(sys.argv) > 3):
     print("Wrong arg : expected 'python describe.py filename")
