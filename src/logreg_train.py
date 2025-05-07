@@ -1,37 +1,53 @@
+import csv
+from global_variable import courses, houses
 import numpy as np
 
 def sigmoid(z):
     return 1 / (1 + np.exp(-z))
 
-def compute_cost(X, y, theta):
-    m = len(y)
-    h = sigmoid(X.dot(theta))  # Prédiction avec sigmoïde
-    cost = (-y.T.dot(np.log(h)) - (1 - y).T.dot(np.log(1 - h))) / m
-    return cost
+def read_csv(filepath):
+    data = {}
+    with open(filepath, newline='') as csvfile:
+        reader = csv.DictReader(csvfile)
+        for house in houses:
+            data[house] = {}
+        for row in reader:
+            # Pour chaque clé, transformer la valeur en float ou None
+            for key, value in row.items():
+                if key in courses:
+                    try:
+                        row[key] = float(value) if value != '' else float("NaN")
+                    except ValueError:
+                        row[key] = float("NaN")
+                if key not in data[row["Hogwarts House"]]:
+                    data[row["Hogwarts House"]][key] = []
+                data[row["Hogwarts House"]][key].append(row[key])
+    return data
 
-def gradient_descent(X, y, theta, alpha, iterations):
-    m = len(y)
-    cost_history = []
+file = "./src/datasets/dataset_train.csv"
+data = read_csv(file) # to do adjust values
 
-    for i in range(iterations):
-        h = sigmoid(X.dot(theta))  # Prédiction
-        gradients = X.T.dot(h - y) / m  # Calcul du gradient
-        theta -= alpha * gradients  # Mise à jour des theta
-        cost_history.append(compute_cost(X, y, theta))  # Historique du coût
+thetas = []
+for course in courses:
+    currentTheta = [0]
+    for house in houses:
+        currentTheta.add(0) #create 1 theta per course
+    thetas.append(currentTheta)
 
-    return theta, cost_history
+student_house = []
+student_grades = {}
+for house, student in data:
+    if house == "Gryffindor":
+        student_house.add([1,0,0,0])
+    if house == "Ravenclaw":
+        student_house.add([0,1,0,0])
+    if house == "Slytherin":
+        student_house.add([0,0,1,0])
+    if house == "Hufflepuff":
+        student_house.add([0,0,0,1])
+    student_grades[student["Index"]] = {}
+    for course, grade in student:
+        if course not in courses:
+            continue
+        student_grades[student["Index"]][course] = grade #=> voir pour la normalise
 
-# Exemple d'utilisation avec des données d'entraînement (X, y)
-# X = matrice des caractéristiques, y = vecteur des étiquettes
-X = np.array([[1, 50, 60], [1, 60, 70], [1, 70, 80]])  # Exemple avec 3 élèves et 2 caractéristiques
-y = np.array([1, 0, 1])  # Gryffindor, Non Gryffindor, Gryffindor (0 ou 1)
-theta = np.zeros(X.shape[1])  # Initialisation des theta
-alpha = 0.01  # Taux d'apprentissage
-iterations = 1000  # Nombre d'itérations
-
-# Apprentissage
-theta, cost_history = gradient_descent(X, y, theta, alpha, iterations)
-
-# Affichage du coût pour chaque itération
-print("Final theta:", theta)
-print("Coût final:", cost_history[-1])
