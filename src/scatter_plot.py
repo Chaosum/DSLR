@@ -7,14 +7,14 @@ from plot_utils import read_csv_split_houses, scatter_plot
 import tkinter as tk
 from tkinter import ttk
 
-if (len(sys.argv) > 3):
+if (len(sys.argv) > 2):
     print("Wrong arg : expected 'python describe.py [filename]")
     sys.exit()
-if (len(sys.argv) == 1 or os.path.isfile(sys.argv[1]) is False):
+if (len(sys.argv) == 2 and os.path.isfile(sys.argv[1]) is True):
+    file = sys.argv[1]
+else :
     print("using default file ./src/datasets/dataset_train.csv")
     file = "./src/datasets/dataset_train.csv"
-else :
-    file = sys.argv[1]
 
 data = read_csv_split_houses(file)
 

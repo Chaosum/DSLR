@@ -6,9 +6,6 @@ import numpy as np
 def sigmoid(z):
     return 1 / (1 + np.exp(-z))
 
-"""
-students_notes: X
-"""
 def read_csv(filepath):
     X = [] # students notes
     y = []
@@ -33,7 +30,7 @@ def normalize(X):
     std = np.std(X, axis=0) #TODOO a voir avec le sujet si faut pas recoder ca
     return (X - mean) / std, mean, std
 
-file = "./src/datasets/dataset_train.csv"
+file = "./datasets/dataset_train.csv"
 X_raw, y = read_csv(file)
 
 
@@ -45,29 +42,40 @@ X = np.c_[np.ones((X.shape[0], 1)), X]
 thetas = np.zeros((len(houses), X.shape[1]))
 
 increment = 0.1
-iteration = 1000
+iteration = 10
 
 print("Training in progress ...")
 try :
-    for _ in range(iteration):
+    for i in range(iteration):
+        print(f"\rTraining in progress ... iteration {i + 1}/{iteration}", end='', flush=True)
         for i in range(len(X)):
             x = X[i]
             # z = θ * xi = θi0 * 1 + θi1 * xi1 + θi2 * xi2 ... θin * xin 
-            # sachant que thetas est de taille 4 car 4 houses
+            # sachant que thetas est de taille 4 car 4 houses on gagne du temps en faisant le dot product thetas . x
             z = np.dot(thetas, x)
-            # ŷ = σ(θ * xi) = σ(z)
+            # la prediction ŷ = σ(z) = σ(θ * xi) 
             prediction = sigmoid(z)
             error = prediction - y[i]
-            gradient = np.outer(error, x)  # produit exterieur ()
+            # produit exterieur l'erreur (yi - ŷi) * xij avec xij = la note dans une matiere
+            gradient = np.outer(error, x) 
+            #on modifie les thetas en fonction du gradient trouvé
             thetas -= increment * gradient
             if np.isnan(thetas).any():
                 raise ValueError("Erreur : NaN in thetas !")
     with open("weights.csv", mode="w", newline='') as resultFile:
         writer = csv.writer(resultFile)
+
+        # En-têtes
         writer.writerow(["House"] + [f"Theta{i}" for i in range(thetas.shape[1])])
+
+        # Poids pour chaque maison
         for i, house in enumerate(houses):
             writer.writerow([house] + list(thetas[i]))
-    print("Training done ✅")
+
+        # Ajoute les vecteurs de normalisation
+        writer.writerow(["Mean"] + list(mean))
+        writer.writerow(["Std"] + list(std))
+        print("\nTraining done ✅")
 
 except Exception as e:
     print("\rTraining failed ❌: {e.message}")

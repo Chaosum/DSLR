@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from global_variable import houses, housesColor, courses
 from plot_utils import read_csv_split_houses, histogram, scatter_plot
 
-if (len(sys.argv) > 3):
+if (len(sys.argv) > 2):
     print("Wrong arg : expected 'python describe.py [filename]")
     sys.exit()
 if (len(sys.argv) == 2 and os.path.isfile(sys.argv[1]) is True):
