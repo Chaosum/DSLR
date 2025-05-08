@@ -1,5 +1,8 @@
 # Nom du dossier du venv
 VENV_NAME := venv
+DATASET_TRAIN := ./src/datasets/dataset_train.csv
+DATASET_TEST := ./src/datasets/dataset_test.csv
+WEIGHTS := ./src/weights.csv
 
 # Commande Python
 PYTHON := $(VENV_NAME)/bin/python
@@ -45,6 +48,12 @@ scatter_plot: setup
 
 pair_plot: setup
 	@$(PYTHON) ./src/pair_plot.py
+
+train: setup
+	@$(PYTHON) ./src/logreg_train.py  ${DATASET_TRAIN}
+
+predict: setup
+	@$(PYTHON) ./src/logreg_predict.py ${DATASET_TEST} ${WEIGHTS}
 
 
 
