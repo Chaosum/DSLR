@@ -1,7 +1,7 @@
 import csv
 import os
 import sys
-from global_variable import courses
+from global_variable import train_courses as courses
 import numpy as np
 
 def sigmoid(z):
@@ -48,17 +48,11 @@ def read_train_result(filepath):
 def normalize(X, mean, std):
     return (X - mean) / std
 
-if (len(sys.argv) > 3):
-    print("Wrong arg : expected 'python describe.py [filename]")
-    sys.exit()
-if (len(sys.argv) != 3):
-    print("using default file ./src/datasets/dataset_train.csv")
-    data_file = "./src/datasets/dataset_train.csv"
-elif os.path.isfile(sys.argv[1]) is True and os.path.isfile(sys.argv[2]) is True:
+if (len(sys.argv) == 3 and os.path.isfile(sys.argv[1]) is True and os.path.isfile(sys.argv[2]) is True):
     data_file = sys.argv[1]
     thetas_files = sys.argv[2]
 else :
-    print("Args Error : missing data or thetas file")
+    print("Wrong arg : expected 'python describe.py dataFile weightsFile")
     sys.exit()
 
 X_raw, students_infos = read_csv(data_file)
@@ -76,6 +70,7 @@ for x in X:
     idx = np.argmax(prediction)
     predicted_house = houses[idx]
     results.append(predicted_house)
-    
-for i, house in enumerate(results):
-    print(f"{students_infos['Index'][i]}, {students_infos['First Name'][i]} {students_infos['Last Name'][i]} : {house}")
+with open("houses.csv", mode="w", newline='') as resultFile:
+    writer = csv.writer(resultFile)
+    for i, house in enumerate(results):
+        writer.writerow([students_infos['Index'][i], house])

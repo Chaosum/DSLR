@@ -1,6 +1,6 @@
 import csv
 import sys
-from global_variable import courses, houses
+from global_variable import train_courses as courses, houses
 import numpy as np
 
 def sigmoid(z):
@@ -42,13 +42,16 @@ X = np.c_[np.ones((X.shape[0], 1)), X]
 thetas = np.zeros((len(houses), X.shape[1]))
 
 increment = 0.1
-iteration = 10
 
 print("Training in progress ...")
 try :
-    for i in range(iteration):
-        print(f"\rTraining in progress ... iteration {i + 1}/{iteration}", end='', flush=True)
-        for i in range(len(X)):
+    sufficient_accuracy = False
+    iteration = 1
+    while not sufficient_accuracy and iteration < 100:
+        print(f"\rTraining in progress ... epoch {iteration}")
+        iteration = iteration + 1
+        old_thetas = thetas.copy()
+        for i in np.random.permutation(len(X)):
             x = X[i]
             # z = θ * xi = θi0 * 1 + θi1 * xi1 + θi2 * xi2 ... θin * xin 
             # sachant que thetas est de taille 4 car 4 houses on gagne du temps en faisant le dot product thetas . x
@@ -62,6 +65,21 @@ try :
             thetas -= increment * gradient
             if np.isnan(thetas).any():
                 raise ValueError("Erreur : NaN in thetas !")
+        predictions = sigmoid(np.dot(X, thetas.T))
+        #la position entre 0 et 3 de la plus grande prediction qu'on a faite
+        predicted_labels = np.argmax(predictions, axis=1)
+        #la position entre 0 et 3 de la maison réel
+        true_labels = np.argmax(y, axis=1)
+
+        predictions = sigmoid(np.dot(X, thetas.T))
+        predicted_labels = np.argmax(predictions, axis=1)
+        true_labels = np.argmax(y, axis=1)
+
+        # Accuracy globale
+        accuracy = np.mean(predicted_labels == true_labels)
+        print(f"Global accuracy: {accuracy:.2%}")
+        sufficient_accuracy = accuracy >= 0.98
+            
     with open("weights.csv", mode="w", newline='') as resultFile:
         writer = csv.writer(resultFile)
 
@@ -78,5 +96,5 @@ try :
         print("\nTraining done ✅")
 
 except Exception as e:
-    print("\rTraining failed ❌: {e.message}")
+    print(f"\rTraining failed ❌: {e}")
 

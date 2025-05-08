@@ -30,3 +30,33 @@ courses = [
     "Charms",
     "Flying"
 ]
+train_courses = [
+    "Arithmancy",
+    "Herbology",
+    "Defense Against the Dark Arts",
+    "Muggle Studies",
+    "Ancient Runes",
+    "History of Magic",
+    "Transfiguration",
+    "Potions",
+    "Care of Magical Creatures"
+]
+
+
+    # "Arithmancy",
+    # "Herbology",
+    # "Defense Against the Dark Arts",
+    # "Muggle Studies",
+    # "Ancient Runes",
+    # "History of Magic",
+    # "Transfiguration",
+    # "Potions",
+
+    # "Arithmancy",
+    # "Astronomy",
+    # "Ancient Runes",
+    # "History of Magic",
+    # "Transfiguration",
+    # "Potions",
+    # "Care of Magical Creatures",
+    # "Flying"
