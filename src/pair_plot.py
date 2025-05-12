@@ -1,54 +1,64 @@
 import os
 import sys
 import matplotlib.pyplot as plt
-from global_variable import houses, housesColor, courses
-from plot_utils import read_csv_split_houses, histogram, scatter_plot
+from constants import HOUSES, HOUSES_COLOR, COURSES
+from utils import read_csv_split_houses, histogram, scatter_plot
 
-if (len(sys.argv) > 2):
-    print("Wrong arg : expected 'python describe.py [filename]")
-    sys.exit()
-if (len(sys.argv) == 2 and os.path.isfile(sys.argv[1]) is True):
-    file = sys.argv[1]
-else :
-    print("using default file ./src/datasets/dataset_train.csv")
-    file = "./src/datasets/dataset_train.csv"
 
-file = "./src/datasets/dataset_train.csv"
-data = read_csv_split_houses(file)
+def parse_arguments() -> str:
+    """
+    Parse the command-line arguments and return the path to the dataset.
+    """
+    if len(sys.argv) > 2:
+        print("Wrong arg : expected 'python describe.py [filename]'")
+        sys.exit(1)
 
-n = len(courses)
+    if len(sys.argv) == 2 and os.path.isfile(sys.argv[1]):
+        return sys.argv[1]
+    else:
+        print("Using default file: ./src/datasets/dataset_train.csv")
+        return "./src/datasets/dataset_train.csv"
 
-fig, axes = plt.subplots(n, n, figsize=(n*1.6, n*1.6))
 
-handles = []  # Liste pour stocker les objets graphiques de la légende
-labels = []   # Liste pour les labels uniques
+def build_pair_plot(data: dict) -> None:
+    """
+    Build and display the pair plot of the courses for each house.
+    """
+    n = len(COURSES)
+    fig, axes = plt.subplots(n, n, figsize=(n * 1.6, n * 1.6))
 
-for i in range(n):
-    for j in range(n):
-        ax = axes[i, j]
-        if i == j:
-            histogram(data, courses[i], ax)
-        else:
-            scatter_plot(data, courses[i], courses[j], ax)
-        if i == n - 1:  # Pour les titres des axes horizontaux
-            ax.set_xlabel(courses[j], rotation=45, ha='right', fontsize=10)
-        if j == 0:  # Pour les titres des axes verticaux
-            ax.set_ylabel(courses[i], rotation=0, ha='right', fontsize=10)
-        if i < n - 1:
-            ax.set_xticks([])
-        if j > 0:
-            ax.set_yticks([])
-        ax.tick_params(axis='both', which='major', labelsize=8)
+    for i in range(n):
+        for j in range(n):
+            ax = axes[i, j]
+            if i == j:
+                histogram(data, COURSES[i], ax)
+            else:
+                scatter_plot(data, COURSES[i], COURSES[j], ax)
 
-legend_handles = []
-for house in houses:
-    if house not in [handle.get_label() for handle in legend_handles]:
-        # Crée un scatter avec un label unique
-        handle = ax.scatter([], [], color=housesColor[house], label=house, alpha=0.5)
-        legend_handles.append(handle)
-# Affichage de la légende unique (en dehors du graphique)
-fig.legend(handles=legend_handles, loc='center right', bbox_to_anchor=(1, 0.5))
+            if i == n - 1:
+                ax.set_xlabel(COURSES[j], rotation=45, ha='right', fontsize=9)
+            else:
+                ax.set_xticks([])
 
-fig.suptitle('Pair Plot des Matières', fontsize=16)
-plt.subplots_adjust(hspace=0.2, wspace=0.2, top=0.95 ,bottom=0.21, left=0.15)
-plt.show()
+            if j == 0:
+                ax.set_ylabel(COURSES[i], rotation=0, ha='right', fontsize=9)
+            else:
+                ax.set_yticks([])
+
+            ax.tick_params(axis='both', labelsize=7)
+
+    # Add legend
+    legend_handles = [
+        plt.Line2D([], [], marker='o', color='w', label=house,
+                   markerfacecolor=HOUSES_COLOR[house], markersize=7, alpha=0.6)
+        for house in HOUSES
+    ]
+    fig.legend(handles=legend_handles, loc='center right', bbox_to_anchor=(1, 0.5))
+    fig.suptitle('Pair Plot des Matières', fontsize=16)
+    plt.subplots_adjust(hspace=0.2, wspace=0.2, top=0.95, bottom=0.21, left=0.15, right=0.9)
+    plt.show()
+
+if __name__ == "__main__":
+    file_path = parse_arguments()
+    data = read_csv_split_houses(file_path)
+    build_pair_plot(data)

@@ -1,0 +1,3 @@
+from .global_variable import HOUSES, HOUSES_COLOR, COURSES, TRAIN_COURSES
+
+__all__ = ["HOUSES", "HOUSES_COLOR", "COURSES", "TRAIN_COURSES"]
