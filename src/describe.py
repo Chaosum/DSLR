@@ -1,5 +1,7 @@
+import csv
 import sys
 import os
+import pandas as pd
 
 from utils import get_std, get_min, get_percentile, get_max, read_csv
 
@@ -38,9 +40,12 @@ def describe(data, numeric_col):
         "50%": {},
         "75%": {},
         "Max": {},
+        "Missing": {},
+        "Range": {},
     }
     for col in numeric_col:
         filtered_data = [value for value in data[col] if value is not None]
+        missing_number = len(data[col]) - len(filtered_data)
         if not data:
             continue
         results["Count"][col] = len(filtered_data)
@@ -51,24 +56,23 @@ def describe(data, numeric_col):
         results["50%"][col] = get_percentile(50, filtered_data)
         results["75%"][col] = get_percentile(75, filtered_data)
         results["Max"][col] = get_max(filtered_data)
+        results['Missing'][col] = missing_number
+        results['Range'][col] = results['Max'][col] - results['Min'][col]
     print_stats(results, numeric_col)
 
 
 def print_stats(describe_result, numeric_col):
-    print(f"{'':<{get_max([len(key) for key in describe_result.keys()])}}", end="")
-    for stat in numeric_col:
-        print(f"{stat:>{len(stat) if len(stat) >= 15 else 15}}", end="\t")
-    print()
+    with open("describe.csv", mode="w", newline="") as f:
+        for stat in numeric_col:
+            f.write(f"{stat},")
+        f.write('\n')
 
-    for feature, stats in describe_result.items():
-        print(
-            f"{feature:<{get_max([len(key) for key in describe_result.keys()])}}",
-            end="",
-        )
+        for feature, stats in describe_result.items():
+            f.write(f"{feature},")
 
-        for stat in stats:
-            print(f"{stats[stat]:>{len(stat) if len(stat) >= 15 else 15}.6f}", end="\t")
-        print()
+            for stat in stats:
+                f.write(f"{stats[stat]},")
+            f.write('\n')
 
 
 if __name__ == "__main__":
@@ -85,4 +89,5 @@ if __name__ == "__main__":
         print("No data found")
         sys.exit(1)
     numeric_cols = detect_numeric_columns(data)
+
     describe(data, numeric_cols)
