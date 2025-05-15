@@ -19,7 +19,7 @@ ACTIVATE := source $(VENV_NAME)/bin/activate
 setup:
 	@if [ ! -d "$(VENV_NAME)" ]; then \
 		echo "Création du venv..."; \
-		$(PYTHON) -m venv $(VENV_NAME); \
+		python3 -m venv $(VENV_NAME); \
 	else \
 		echo "✅ venv déjà présent."; \
 	fi
@@ -38,16 +38,16 @@ setup:
 
 # Pour lancer un script Python dans le venv
 describe: setup
-	@$(PYTHON) ./src/describe.py
+	@$(PYTHON) ./src/describe.py ${DATASET_TRAIN}
 
 histogram: setup
-	@$(PYTHON) ./src/histogram.py
+	@$(PYTHON) ./src/histogram.py ${DATASET_TRAIN}
 
 scatter_plot: setup
-	@$(PYTHON) ./src/scatter_plot.py
+	@$(PYTHON) ./src/scatter_plot.py ${DATASET_TRAIN}
 
 pair_plot: setup
-	@$(PYTHON) ./src/pair_plot.py
+	@$(PYTHON) ./src/pair_plot.py ${DATASET_TRAIN}
 
 train: setup
 	@$(PYTHON) ./src/logreg_train.py  ${DATASET_TRAIN}

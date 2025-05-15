@@ -115,7 +115,11 @@ if __name__ == "__main__":
     else:
         print("using default file ./src/datasets/dataset_train.csv")
         file = "./src/datasets/dataset_train.csv"
-    data = read_csv(file)
+    try :
+        data = read_csv(file)
+    except Exception as e:
+        print(f"Erreur while parsing the file {file}")
+        sys.exit()
     if data is None:
         print("No data found")
         sys.exit(1)

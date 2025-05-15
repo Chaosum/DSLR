@@ -61,7 +61,7 @@ if __name__ == "__main__":
         data_file = sys.argv[1]
         thetas_files = sys.argv[2]
     else:
-        print("Wrong arg : expected 'python describe.py dataFile weightsFile")
+        print("Wrong arg : expected 'python logreg_predict.py dataFile weightsFile")
         sys.exit()
     X_raw, students_infos = read_csv(data_file)
 

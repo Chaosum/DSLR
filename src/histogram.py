@@ -25,16 +25,17 @@ def update_plot(event=None):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) > 2:
+    if len(sys.argv) != 2 or os.path.isfile(sys.argv[1]) is False:
         print("Wrong arg : expected 'python histogram.py [filename]")
         sys.exit()
-    if len(sys.argv) == 2 and os.path.isfile(sys.argv[1]) is True:
-        file = sys.argv[1]
     else:
-        print("using default file ./src/datasets/dataset_train.csv")
-        file = "./src/datasets/dataset_train.csv"
+        file = sys.argv[1]
 
-    data = read_csv_split_houses(file)
+    try :
+        data = read_csv_split_houses(file)
+    except Exception as e:
+        print(f"Erreur while parsing the file {file}")
+        sys.exit()
 
     root = tk.Tk()
     root.protocol("WM_DELETE_WINDOW", on_closing)

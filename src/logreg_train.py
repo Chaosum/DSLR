@@ -1,4 +1,6 @@
 import csv
+import os
+import sys
 from constants import COURSES, HOUSES
 import numpy as np
 
@@ -50,21 +52,31 @@ def normalize(X):
 
 
 if __name__ == "__main__":
-    file = "./datasets/dataset_train.csv"
-    X_raw, y = read_csv(file)
-
+    if ( 
+        len(sys.argv) == 2
+        and os.path.isfile(sys.argv[1]) is True
+    ):
+        file = sys.argv[1]
+    else:
+        print("Wrong arg : expected 'python logregtrain.py datasetpath.csv")
+        sys.exit()
+    try :
+        X_raw, y = read_csv(file)
+    except Exception as e:
+        print(f"Erreur while parsing the file {file}")
+        sys.exit()
     X, mean, std = normalize(X_raw)
     X = np.c_[np.ones((X.shape[0], 1)), X]
     thetas = np.zeros((len(HOUSES), X.shape[1]))
 
     increment = 0.1
 
-    print("Training in progress ...")
+    print("Training in progress ...",end='')
     try:
         sufficient_accuracy = False
         iteration = 1
         while not sufficient_accuracy and iteration < 100:
-            print(f"\rTraining in progress ... epoch {iteration}")
+            print(f"\rTraining in progress ... epoch {iteration}", end='')
             iteration = iteration + 1
             old_thetas = thetas.copy()
             for i in np.random.permutation(len(X)):
@@ -87,13 +99,9 @@ if __name__ == "__main__":
             # la position entre 0 et 3 de la maison réel
             true_labels = np.argmax(y, axis=1)
 
-            predictions = sigmoid(np.dot(X, thetas.T))
-            predicted_labels = np.argmax(predictions, axis=1)
-            true_labels = np.argmax(y, axis=1)
-
             # Accuracy globale
             accuracy = np.mean(predicted_labels == true_labels)
-            print(f"Global accuracy: {accuracy:.2%}")
+            print(f"\nGlobal accuracy: {accuracy:.2%}")
             sufficient_accuracy = accuracy >= 0.98
 
         with open("weights.csv", mode="w", newline="") as resultFile:

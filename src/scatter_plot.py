@@ -36,13 +36,16 @@ def validate_selection(event):
 
 
 def load_data():
-    if len(sys.argv) > 2:
-        print("Usage: python describe.py [optional: filename]")
+    if len(sys.argv) != 2 or os.path.isfile(sys.argv[1]) is False:
+        print("Wrong args: python scatter_plot.py filename]")
         sys.exit(1)
-    if len(sys.argv) == 2 and os.path.isfile(sys.argv[1]):
-        return read_csv_split_houses(sys.argv[1])
-    print("Using default file: ./src/datasets/dataset_train.csv")
-    return read_csv_split_houses("./src/datasets/dataset_train.csv")
+    else:
+        try :
+            data = read_csv_split_houses("./src/datasets/dataset_train.csv")
+        except Exception as e:
+            print(f"Erreur while parsing the file {sys.argv[1]}")
+            sys.exit()
+        return data
 
 
 if __name__ == "__main__":
