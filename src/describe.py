@@ -61,9 +61,22 @@ def describe(data, numeric_col):
         results["Range"][col] = results["Max"][col] - results["Min"][col]
         results["IQR"] [col] =  get_percentile(75, filtered_data) - get_percentile(25, filtered_data)
         results["Skewness"] [col] =  get_skewness(filtered_data)
+    save_stats_csv(results, numeric_col)
     save_stats(results, numeric_col)
     print_stats(results, numeric_col)
 
+def save_stats_csv(describe_result, numeric_col):
+    with open("describe.csv", mode="w", newline="") as f:
+        for stat in numeric_col:
+            f.write(f"{stat},")
+        f.write('\n')
+
+        for feature, stats in describe_result.items():
+            f.write(f"{feature},")
+
+            for stat in stats:
+                f.write(f"{stats[stat]},")
+            f.write('\n')
 
 def save_stats(describe_result, numeric_col, filename="describe.txt"):
     with open(filename, "w") as file:
