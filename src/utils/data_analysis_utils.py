@@ -68,3 +68,13 @@ def transpose(matrix):
 
 def add_column_ones(matrix):
     return [[1.0] + row for row in matrix]
+
+#la symetrie/repartition des notes comparer a la moyenne
+# 0 symetrique
+# > 0 Beaucoup de petites valeurs, quelques très grandes
+# < 0 Beaucoup de grandes valeurs, quelques très petites
+def get_skewness(data): 
+    mean = get_mean(data)
+    std = get_std(data)
+    n = len(data)
+    return sum(((x - mean)/std)**3 for x in data) / n
