@@ -32,27 +32,38 @@ def build_pair_plot(data: dict) -> None:
                 scatter_plot(data, COURSES[i], COURSES[j], ax)
 
             if i == n - 1:
-                ax.set_xlabel(COURSES[j], rotation=45, ha='right', fontsize=9)
+                ax.set_xlabel(COURSES[j], rotation=45, ha="right", fontsize=9)
             else:
                 ax.set_xticks([])
 
             if j == 0:
-                ax.set_ylabel(COURSES[i], rotation=0, ha='right', fontsize=9)
+                ax.set_ylabel(COURSES[i], rotation=0, ha="right", fontsize=9)
             else:
                 ax.set_yticks([])
 
-            ax.tick_params(axis='both', labelsize=7)
+            ax.tick_params(axis="both", labelsize=7)
 
     # Add legend
     legend_handles = [
-        plt.Line2D([], [], marker='o', color='w', label=house,
-                   markerfacecolor=HOUSES_COLOR[house], markersize=7, alpha=0.6)
+        plt.Line2D(
+            [],
+            [],
+            marker="o",
+            color="w",
+            label=house,
+            markerfacecolor=HOUSES_COLOR[house],
+            markersize=7,
+            alpha=0.6,
+        )
         for house in HOUSES
     ]
-    fig.legend(handles=legend_handles, loc='center right', bbox_to_anchor=(1, 0.5))
-    fig.suptitle('Pair Plot des Matières', fontsize=16)
-    plt.subplots_adjust(hspace=0.2, wspace=0.2, top=0.95, bottom=0.21, left=0.15, right=0.9)
+    fig.legend(handles=legend_handles, loc="center right", bbox_to_anchor=(1, 0.5))
+    fig.suptitle("Pair Plot des Matières", fontsize=16)
+    plt.subplots_adjust(
+        hspace=0.2, wspace=0.2, top=0.95, bottom=0.21, left=0.15, right=0.9
+    )
     plt.show()
+
 
 if __name__ == "__main__":
     file_path = parse_arguments()

@@ -21,7 +21,7 @@ def read_csv(filepath):
                 continue  # Skip rows with missing values
             try:
                 notes = [float(row[course]) for course in COURSES]
-            except:
+            except ValueError:
                 continue  # Skip rows with wrong float values
             X.append(notes)
 

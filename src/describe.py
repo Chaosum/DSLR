@@ -1,4 +1,3 @@
-import csv
 import sys
 import os
 
@@ -69,14 +68,14 @@ def save_stats_csv(describe_result, numeric_col):
     with open("describe.csv", mode="w", newline="") as f:
         for stat in numeric_col:
             f.write(f"{stat},")
-        f.write('\n')
+        f.write("\n")
 
         for feature, stats in describe_result.items():
             f.write(f"{feature},")
 
             for stat in stats:
                 f.write(f"{stats[stat]},")
-            f.write('\n')
+            f.write("\n")
 
 def save_stats(describe_result, numeric_col, filename="describe.txt"):
     with open(filename, "w") as file:
